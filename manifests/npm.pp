@@ -3,9 +3,13 @@ class nodejs::npm($user) {
   $NPM_PATH = '/usr/local/src/npm'
   $NPM_REPO = 'git://github.com/isaacs/npm.git'
   
-  package { "npm-git-dep":
-      name    => 'git'
-    , ensure  => "installed"
+  case $operatingsystem {
+    Ubuntu,Debian: {
+      if ! defined(Package['git-core'])             { package { 'git-core':             ensure => installed } }
+    }
+    default: {
+      if ! defined(Package['git'])             { package { 'git':             ensure => installed } }
+    }
   }
   
   exec { 'npm-git-clone':
