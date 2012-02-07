@@ -3,17 +3,9 @@ class nodejs($user) {
   $node_ver = "v0.6.7"
   $node_tar = "node-$node_ver.tar.gz"
 
-  package { "openssl":
-    ensure => "installed"
-  }
-
-  package { "libcurl4-openssl-dev":
-    ensure => "installed"
-  }
-  
-  package { 'build-essential':
-    ensure  => installed
-  }
+  if ! defined(Package['openssl'])              { package { 'openssl':              ensure => 'installed' } }
+  if ! defined(Package['libcurl4-openssl-dev']) { package { 'libcurl4-openssl-dev': ensure => 'installed' } }
+  if ! defined(Package['build-essential'])      { package { 'build-essential':      ensure => 'installed' } }
 
   file { "/tmp/$node_tar":
       source => "puppet:///modules/nodejs/$node_tar"
